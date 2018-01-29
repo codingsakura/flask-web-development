@@ -8,6 +8,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import Required
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate, MigrateCommand
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
@@ -76,6 +77,8 @@ def internal_server_error(e):
 def make_shell_context():
 	return dict(app = app, db = db, User = User, Role = Role)
 manager.add_command('shell', Shell(make_context = make_shell_context))
+migrate = Migrate(app, db)
+manager.add_command('db', MigrateCommand)
 
 if __name__=='__main__':
 	manager.run()
