@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, session, redirect, url_for
-from flask_script import Manager
+from flask_script import Manager, Shell
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from datetime import datetime
@@ -72,6 +72,10 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
 	return render_template('500.html'), 500
+
+def make_shell_context():
+	return dict(app = app, db = db, User = User, Role = Role)
+manager.add_command('shell', Shell(make_context = make_shell_context))
 
 if __name__=='__main__':
 	manager.run()
